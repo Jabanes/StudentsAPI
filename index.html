@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    First Name: <input id="studentFirstName" type="text">
+    Last name: <input id="studentLastName" type="text">
+    Age: <input id="studentAge" type="number">
+    Email: <input id="studentEmail" type="email">
+    Grade: <input id="studentGrade" type="number">
+    <button onclick="add()">Add</button>
+
+    <div id="display"></div>
+    <script>
+        const SERVER = "http://localhost:3000/students"
+
+
+
+        const add = () => axios.post(SERVER,
+            {
+                "first": document.getElementById("studentFirstName").value,
+                "last": document.getElementById("studentLastName").value,
+                "age": document.getElementById("studentAge").value,
+                "email": document.getElementById("studentEmail").value,
+                "grade": document.getElementById("studentGrade").value,
+
+            }
+            , read()
+        )
+
+        const read = () => axios(SERVER).then(res =>
+            display = document.getElementById("display").innerHTML = res.data.map(stud => `<button onclick="del('${stud.id}')">Delete</button> ${stud.first} ${stud.last} <button onclick="update('${stud.id}')">Update</button><br>`)
+
+        )
+
+        const del = (id) => axios.delete(SERVER + `/${id}`,
+            {
+                "first": document.getElementById("studentFirstName").value,
+                "last": document.getElementById("studentLastName").value,
+                "age": document.getElementById("studentAge").value,
+                "email": document.getElementById("studentEmail").value,
+                "grade": document.getElementById("studentGrade").value,
+            }
+            , read()
+        )
+
+        const update = (id) => axios.put(SERVER, + `/${id}`,
+            {
+                "first": document.getElementById("studentFirstName").value,
+                "last": document.getElementById("studentLastName").value,
+                "age": document.getElementById("studentAge").value,
+                "email": document.getElementById("studentEmail").value,
+                "grade": document.getElementById("studentGrade").value,
+
+            }
+            , read()
+        )
+
+        read()
+
+    </script>
+</body>
+
+</html>
