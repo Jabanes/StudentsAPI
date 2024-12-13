@@ -6,64 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+
 </head>
 
 <body>
 
-    First Name: <input id="studentFirstName" type="text">
-    Last name: <input id="studentLastName" type="text">
-    Age: <input id="studentAge" type="number">
-    Email: <input id="studentEmail" type="email">
-    Grade: <input id="studentGrade" type="number">
+    Name: <input id="itemName" type="text"> <br>
+    Type: <select id="itemType">
+        <option value="dairy">dairy</option>
+        <option value="non-dairy">non-dairy</option>
+    </select>
+    <br>
+    Expire date: <input id="exDate" type="date"> <br>
+    Price: <input id="itemPrice" type="number"><br>
+    Quantity: <input placeholder="How many in stock?" id="stock" type="number">
     <button onclick="add()">Add</button>
-
+    <h1>SHOP</h1>
+    <hr>
     <div id="display"></div>
+
     <script>
-        const SERVER = "http://localhost:3000/students"
+        const SERVER = "http://localhost:3000/cart"
 
 
+        const read = () => axios(SERVER).then(res => display.innerHTML = res.data.map(itm => `<button onclick ="del('${itm.id}')">Delete</button> ${itm.itemName}---------------------- ${itm.itemPrice}$<button onclick ="update('${itm.id}')">Update</button> <hr>`).join(""))
+        read()
 
         const add = () => axios.post(SERVER,
             {
-                "first": document.getElementById("studentFirstName").value,
-                "last": document.getElementById("studentLastName").value,
-                "age": document.getElementById("studentAge").value,
-                "email": document.getElementById("studentEmail").value,
-                "grade": document.getElementById("studentGrade").value,
-
+                "itemName": document.getElementById("itemName").value,
+                "itemType": document.getElementById("itemType").value,
+                "exDate": document.getElementById("exDate").value,
+                "itemPrice": parseInt(document.getElementById("itemPrice").value),
+                "stock": parseInt(document.getElementById("stock").value)
             }
-            , read()
-        )
-
-        const read = () => axios(SERVER).then(res =>
-            display = document.getElementById("display").innerHTML = res.data.map(stud => `<button onclick="del('${stud.id}')">Delete</button> ${stud.first} ${stud.last} <button onclick="update('${stud.id}')">Update</button><br>`)
-
+            ,read()
         )
 
         const del = (id) => axios.delete(SERVER + `/${id}`,
             {
-                "first": document.getElementById("studentFirstName").value,
-                "last": document.getElementById("studentLastName").value,
-                "age": document.getElementById("studentAge").value,
-                "email": document.getElementById("studentEmail").value,
-                "grade": document.getElementById("studentGrade").value,
+                "itemName": document.getElementById("itemName").value,
+                "itemType": document.getElementById("itemType").value,
+                "exDate": document.getElementById("exDate").value,
+                "itemPrice": parseInt(document.getElementById("itemPrice").value),
+                "stock": parseInt(document.getElementById("stock").value)
             }
             , read()
         )
-
-        const update = (id) => axios.put(SERVER, + `/${id}`,
+        const update=(id)=> axios.put(SERVER + `/${id}`,
             {
-                "first": document.getElementById("studentFirstName").value,
-                "last": document.getElementById("studentLastName").value,
-                "age": document.getElementById("studentAge").value,
-                "email": document.getElementById("studentEmail").value,
-                "grade": document.getElementById("studentGrade").value,
-
+                "itemName": document.getElementById("itemName").value,
+                "itemType": document.getElementById("itemType").value,
+                "exDate": document.getElementById("exDate").value,
+                "itemPrice": parseInt(document.getElementById("itemPrice").value),
+                "stock": parseInt(document.getElementById("stock").value)
             }
             , read()
         )
+            
 
-        read()
+
 
     </script>
 </body>
